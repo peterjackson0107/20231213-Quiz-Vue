@@ -102,7 +102,7 @@ export default {
         icon: "success",
       });
     },
-    addQuestion() {
+    addOptions() {
       if (this.question && this.questionType) {
         let optionArray = this.option.split(";").map((option) => option.trim());
         this.questions = {
@@ -140,7 +140,7 @@ export default {
       );
     },
     saveNotPublish(){
-      this.addQuestion(),
+      this.addOptions(),
       console.log(this.questionsList),
       console.log(this.qAnswer),
       axios({
@@ -169,7 +169,7 @@ export default {
         this.showAlert()
 },
     saveAndPublish(){
-      this.addQuestion(),
+      this.addOptions(),
       console.log(this.questionsList),
       console.log(this.qAnswer),
       axios({
@@ -269,7 +269,7 @@ export default {
                 <input type="text" id="option" v-model="option" style="width: 400px; font-size: 24px; margin-top: 43px;"/>
                 <span style="margin-left: 20px; font-size: 24px;">(選項請以 " ; " 分開)</span><br>
                 <input type="checkbox" id="isNecessary" v-model="isNecessary" style="margin-top: 55px;"/>
-                <button @click="addQuestion()" style="font-size: 24px; margin-left: 50px; margin-bottom: 20px;"><span>加入</span></button><br>
+                <button @click="addOptions()" style="font-size: 24px; margin-left: 50px; margin-bottom: 20px;"><span>加入</span></button><br>
                 <!-- 刪除問題按钮 -->
                 <button @click="deleteSelectedQuestions()" style="margin-top: 20px;">
                 <i class="fa-solid fa-trash-can" style="font-size: 30px;"></i>
