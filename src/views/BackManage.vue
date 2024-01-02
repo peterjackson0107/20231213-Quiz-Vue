@@ -17,7 +17,7 @@ export default {
       question: "",
       questionType: "單選題", // 默認類型
       option: "",
-      necessary: false,
+      isNecessary: false,
       questions: [],
       qAnswer:[],
       questionsList:[],
@@ -109,14 +109,13 @@ export default {
           title: this.question,
           type: this.questionType,
           option: optionArray.join(', '), //轉字串 因為java類型為字串
-          necessary: this.necessary,
+          necessary: this.isNecessary,
           isSelected: false,  //143行，這邊不寫預設的話，那邊就要加
           selectedOption: "",
         };
 
         this.qAnswer.push(this.questions);
-        console.log(this.qAnswer);
-        console.log(this.questions);
+        // console.log(this.qAnswer);
 
         this.questionsList = {
           name: this.name,
@@ -132,7 +131,7 @@ export default {
         this.question = "";
         this.questionType = "單選題"; // 重新設置默認類型
         this.option = "";
-        this.necessary = 'false';
+        this.isNecessary = false;
       }
     },
     deleteSelectedQuestions() {
@@ -257,7 +256,7 @@ export default {
                 <label for="question">問題：</label><br/>
                 <label for="questionType">問題類型：</label><br/>
                 <label for="option">答案選項：</label><br/>
-                <label for="necessary">必填：</label>
+                <label for="isNecessary">必填：</label>
             </div>
 
             <div class="content2">
@@ -269,7 +268,8 @@ export default {
                 </select><br/>
                 <input type="text" id="option" v-model="option" style="width: 400px; font-size: 24px; margin-top: 43px;"/>
                 <span style="margin-left: 20px; font-size: 24px;">(選項請以 " ; " 分開)</span><br>
-                <input type="checkbox" id="" :checked="necessary" style="margin-top: 55px;"/>
+                <input type="checkbox" id="isNecessary" v-model="isNecessary" style="margin-top: 55px;"/>
+                <span>{{ this.isNecessary? 必填 : 非必填 }}</span>
                 <button @click="addQuestion()" style="font-size: 24px; margin-left: 50px; margin-bottom: 20px;"><span>加入</span></button><br>
                 <!-- 刪除問題按钮 -->
                 <button @click="deleteSelectedQuestions()" style="margin-top: 20px;">
@@ -328,26 +328,26 @@ export default {
                 <!-- 選項 -->
                   <div class="down2" v-if="question.type === '單選題'">
                     <div v-for="(option, index) in question.option.split(', ')" :key="index">
-                      <input type="radio" :value="option" v-model="question.selectedOption"/>
-                      <span :for="index" style="font-size: 24px;">{{ option }}</span>
+                      <input type="radio" disabled="disabled" :value="option" v-model="question.selectedOption"/>
+                      <span :for="index" style="margin-left: 10px; font-size: 24px;">{{ option }}</span>
                     </div>
                   </div>
 
                   <div class="down3" v-else-if="question.type === '多選題'">
-                    <div v-for="(option, index) in question.option.split(',')" :key="index">
-                      <input type="checkbox" :value="option" v-model="question.selectedOption[index]" :id="index"/>
-                      <span :for="index" style="font-size: 24px;">{{ option }}</span>
+                    <div v-for="(option, index) in question.option.split(', ')" :key="index">
+                      <input type="checkbox" disabled="disabled" :value="option" v-model="question.selectedOption[index]" :id="index"/>
+                      <span :for="index" style="margin-left: 10px; font-size: 24px;">{{ option }}</span>
                     </div>
                   </div>
                   
                   <div class="down4" v-else-if="question.type === '簡答題'">
-                    <textarea cols="40" rows="4" v-model="question.shortAnswer" style="font-size: 24px; resize:none;"></textarea>
+                    <textarea cols="40" rows="4" disabled="disabled" v-model="question.shortAnswer" style="font-size: 24px; resize:none;"></textarea>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-              <button @click="changeTab('two')" style="margin-top: 29px; font-size: 24px;"><span>上一頁</span></button>
+              <button @click="changeTab('two')" style="margin-top: 29px; font-size: 24px;"><span style="font-size: 24px;">上一頁</span></button>
               <button @click="saveNotPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;">儲存</RouterLink></button>
               <button @click="saveAndPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;">儲存和送出</RouterLink></button>
         </div>
@@ -383,6 +383,10 @@ export default {
 </template>
 
 <style scoped lang="scss">
+label, p, button, select, tr, td, th, span{
+    font-family: "Montserrat", sans-serif;
+    color: #557;
+}
 .tab-inner {
   width: 90vw;
   height: 100%;
@@ -449,10 +453,6 @@ td {
     background-color: rgb(227, 227, 227);
 }
 
-label, p, button, select, tr, td, th, span{
-    font-family: "Montserrat", sans-serif;
-    color: #557;
-}
 label{
     line-height: 80px;
 }

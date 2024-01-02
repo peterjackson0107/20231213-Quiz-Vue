@@ -1,9 +1,4 @@
 <script>
-Swal.fire({
-  title: "這邊是後台",
-  text: "成功進入後台了!!!",
-  icon: "success"
-});
 import axios from 'axios';
 import { mapState, mapActions } from 'pinia'
 import counter from '../stores/counter'
