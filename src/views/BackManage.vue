@@ -348,8 +348,8 @@ export default {
             </div>
           </div>
               <button @click="changeTab('two')" style="margin-top: 29px; font-size: 24px;"><span>上一頁</span></button>
-              <button @click="saveNotPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;">儲存</button>
-              <button @click="saveAndPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;">儲存和送出</button>
+              <button @click="saveNotPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;">儲存</RouterLink></button>
+              <button @click="saveAndPublish()" style="margin-top: 29px; margin-left: 10px; font-size: 24px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;">儲存和送出</RouterLink></button>
         </div>
 
         <div id="four" class="tab-inner" v-if="tabID == 'four'">
