@@ -17,7 +17,7 @@ export default {
       question: "",
       questionType: "單選題", // 默認類型
       option: "",
-      isNecessary: "",
+      necessary: false,
       questions: [],
       qAnswer:[],
       questionsList:[],
@@ -105,12 +105,11 @@ export default {
     addQuestion() {
       if (this.question && this.questionType) {
         let optionArray = this.option.split(";").map((option) => option.trim());
-
         this.questions = {
           title: this.question,
           type: this.questionType,
           option: optionArray.join(', '), //轉字串 因為java類型為字串
-          isNecessary: this.isNecessary,
+          necessary: this.necessary,
           isSelected: false,  //143行，這邊不寫預設的話，那邊就要加
           selectedOption: "",
         };
@@ -133,7 +132,7 @@ export default {
         this.question = "";
         this.questionType = "單選題"; // 重新設置默認類型
         this.option = "";
-        this.isNecessary = false;
+        this.necessary = 'false';
       }
     },
     deleteSelectedQuestions() {
@@ -258,7 +257,7 @@ export default {
                 <label for="question">問題：</label><br/>
                 <label for="questionType">問題類型：</label><br/>
                 <label for="option">答案選項：</label><br/>
-                <label for="isNecessary">必填：</label>
+                <label for="necessary">必填：</label>
             </div>
 
             <div class="content2">
@@ -270,7 +269,7 @@ export default {
                 </select><br/>
                 <input type="text" id="option" v-model="option" style="width: 400px; font-size: 24px; margin-top: 43px;"/>
                 <span style="margin-left: 20px; font-size: 24px;">(選項請以 " ; " 分開)</span><br>
-                <input type="checkbox" id="isNecessary" v-model="isNecessary" style="margin-top: 55px;"/>
+                <input type="checkbox" id="" :checked="necessary" style="margin-top: 55px;"/>
                 <button @click="addQuestion()" style="font-size: 24px; margin-left: 50px; margin-bottom: 20px;"><span>加入</span></button><br>
                 <!-- 刪除問題按钮 -->
                 <button @click="deleteSelectedQuestions()" style="margin-top: 20px;">
@@ -295,7 +294,7 @@ export default {
                 <td>{{ index + 1 }}</td>
                 <td>{{ question.title }}</td>
                 <td>{{ question.type }}</td>
-                <td>{{ question.isNecessary ? "是" : "否" }}</td>
+                <td>{{ question.necessary ? "是" : "否" }}</td>
                 </tr>
             </tbody>
             </table>
@@ -325,10 +324,10 @@ export default {
             </div>
             <div class="down">
               <div class="down1" v-for="(question, index) in qAnswer" :key="index">
-                <p style="font-size: 24px;">{{ index + 1 }}. {{ question.title }} ({{ question.isNecessary ? '給我填喔' : '可不填' }})</p>
+                <p style="font-size: 24px;">{{ index + 1 }}. {{ question.title }} ({{ question.necessary ? '必填' : '可不填' }})</p>
                 <!-- 選項 -->
                   <div class="down2" v-if="question.type === '單選題'">
-                    <div v-for="(option, index) in question.option.split(',')" :key="index">
+                    <div v-for="(option, index) in question.option.split(', ')" :key="index">
                       <input type="radio" :value="option" v-model="question.selectedOption"/>
                       <span :for="index" style="font-size: 24px;">{{ option }}</span>
                     </div>
