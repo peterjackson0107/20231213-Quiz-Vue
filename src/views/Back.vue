@@ -19,6 +19,9 @@ export default {
     // 在組件被創建時獲取當前日期
     this.getNowDate();
     },
+    mounted(){
+        this.searchQuestion();
+    },
     methods: {
     ...mapActions(counter, ["createData"]),
     searchQuestion() {
@@ -27,10 +30,10 @@ export default {
             method:"POST",
             headers:{"Content-Type":"application/json"},
             data:{
-                quizName: this.searchText,
-                startDate: this.searchStart,
-                endDate: this.searchEnd,
-                login: true,
+                quiz_name: this.searchText,
+                start_date: this.searchStart,
+                end_date: this.searchEnd,
+                is_login: true,
             },
         })
 //     .then( 這邊是錯誤的程式
@@ -90,11 +93,11 @@ export default {
                     <label for="time">統計時間：</label><br/>
                 </div>
                 <div class="content2">
-                    <input type="text" id="" style="width: 660px; margin-top: 22px; font-size: 24px;" v-model="searchText"/><br/>
-                    <input type="date" id="" style="font-size: 24px; margin-top: 39px;" v-model="searchStart"/>
+                    <input type="text" id="searchText" style="width: 660px; margin-top: 22px; font-size: 24px;" v-model="searchText"/><br/>
+                    <input type="date" id="searchStart" style="font-size: 24px; margin-top: 39px;" v-model="searchStart"/>
                     <span style="margin-left: 30px ;">到</span>
-                    <input type="date" id="" style="font-size: 24px; margin-top: 39px; margin-left:30px ;" v-model="searchEnd"/>
-                    <button type="submit" @click="searchQuestion" style="margin-left: 30px ;"><span>搜尋</span></button><br/>
+                    <input type="date" id="searchEnd" style="font-size: 24px; margin-top: 39px; margin-left:30px ;" v-model="searchEnd"/>
+                    <button type="submit" @click="searchQuestion()" style="margin-left: 30px ;"><span>搜尋</span></button><br/>
                     <button style=" margin-top: 30px;"><i class="fa-solid fa-trash-can" style=" font-size: 30px;"></i></button>
                     <button style=" margin-top: 30px; margin-left:30px ;"><RouterLink :to="`/BackManage`" class="rounterItem" style="text-decoration: none; color: #557;"><i class="fa-solid fa-plus" style=" font-size: 30px;"></i></RouterLink></button>
                 </div>

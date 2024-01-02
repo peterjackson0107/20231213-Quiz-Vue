@@ -15,6 +15,9 @@ export default {
             questionStr:[],
         }
     },
+    mounted(){
+        this.searchQuestion();
+    },
     created() {
     // 在組件被創建時獲取當前日期
     this.getNowDate();
@@ -27,10 +30,10 @@ export default {
             method:"POST",
             headers:{"Content-Type":"application/json"},
             data:{
-                quizName: this.searchText,
-                startDate: this.searchStart,
-                endDate: this.searchEnd,
-                login: true,
+                quiz_name: this.searchText,   //名字要跟quizReq一樣
+                start_date: this.searchStart,
+                end_date: this.searchEnd,
+                is_login: false,
             },
         })
 //     .then( 這邊是錯誤的程式
@@ -101,7 +104,6 @@ export default {
                     <table border="1" style="width: 50vw; margin: auto; color: #557;">
                         <thead style= "background-color: rgb(194, 190, 190);">
                             <tr>
-                                <th class="check"></th>
                                 <th class="number">編號</th>
                                 <th class="name">名稱</th>
                                 <th class="now">狀態</th>
@@ -112,7 +114,6 @@ export default {
                         </thead>
                         <tbody>
                             <tr v-for="(quiz, index) in quizList" :key="index">
-                            <td><input type="checkbox"/></td>
                             <td>{{ quiz.num }}</td>
                             <td>{{ quiz.name }}</td>
                             <td class="font state" v-if="quiz.startDate > this.nowDate">尚未開始</td>
