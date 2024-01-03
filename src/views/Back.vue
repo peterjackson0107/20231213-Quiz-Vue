@@ -11,8 +11,12 @@ export default {
             nowDate: "",
             startDate:"",
             endDate:"",
+            //資料庫所有抓到的問卷
             quizList: [],
             questionStr:[],
+            //處理quizList的分頁
+            currentPage: 1,
+            itemsPerPage: Math.ceil((Math.random())*(10-1+1)+1),
         }
     },
     created() {
@@ -20,7 +24,7 @@ export default {
     this.getNowDate();
     },
     mounted(){
-        this.searchQuestion();
+    this.searchQuestion();
     },
     methods: {
     ...mapActions(counter, ["createData"]),
@@ -64,6 +68,8 @@ export default {
                 });
                 console.log(this.quizList);
                 // console.log(this.quizList[0].questionStr[0].title);
+                //呼叫分頁的方法
+                paginationQuizlist();
             })
             // 處理失敗的情況
         .catch((error) => {
@@ -81,6 +87,12 @@ export default {
 },
     computed: {
     ...mapState(counter, ["quizData"]),
+    //處理quizList的分頁
+    paginationQuizlist() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.quizList.slice(startIndex, endIndex);
+  },
   },
 }
 </script>
@@ -91,6 +103,7 @@ export default {
                 <div class="content1">
                     <label for="questionName">問卷名稱：</label><br/>
                     <label for="time">統計時間：</label><br/>
+                    {{ this.itemsPerPage }}
                 </div>
                 <div class="content2">
                     <input type="text" id="searchText" style="width: 660px; margin-top: 22px; font-size: 24px;" v-model="searchText"/><br/>
@@ -117,21 +130,25 @@ export default {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(quiz, index) in quizList" :key="index">
-                            <td><input type="checkbox"/></td>
-                            <td>{{ quiz.num }}</td>
-                            <td>{{ quiz.name }}</td>
-                            <td class="font state" v-if="quiz.startDate > this.nowDate">尚未開始</td>
-                            <td class="font state" v-if="quiz.startDate <= this.nowDate && this.nowDate <= quiz.endDate">進行中</td>
-                            <td class="font state" v-if="quiz.endDate < this.nowDate">已結束</td>
-                            <td>{{ quiz.startDate }}</td>
-                            <td>{{ quiz.endDate }}</td>
-                            <!-- 按鈕 -->
-                            <td><button type="button" data-bs-toggle="modal" :data-bs-target="'#quizModal' + index" style="border: 0; background-color: rgb(194, 190, 190);">查看</button></td>
+                            <tr v-for="(quiz, index) in paginationQuizlist" :key="index">
+                                <td><input type="checkbox" /></td>
+                                <td>{{ quiz.num }}</td>
+                                <td>{{ quiz.name }}</td>
+                                <td class="font state" v-if="quiz.startDate > this.nowDate">尚未開始</td>
+                                <td class="font state" v-if="quiz.startDate <= this.nowDate && this.nowDate <= quiz.endDate">進行中</td>
+                                <td class="font state" v-if="quiz.endDate < this.nowDate">已結束</td>
+                                <td>{{ quiz.startDate }}</td>
+                                <td>{{ quiz.endDate }}</td>
+                                <!-- 按鈕 -->
+                                <td><button type="button" data-bs-toggle="modal" :data-bs-target="'#quizModal' + index" style="border: 0; background-color: rgb(194, 190, 190);">查看</button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <button @click="currentPage -= 1" :disabled="currentPage === 1" style="margin-right: 10px;"><span>上一頁</span></button>
+                <span>{{ currentPage }}</span>
+                <button @click="currentPage += 1" :disabled="currentPage * itemsPerPage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
+            </div>
                 <!-- 跳出視窗內容 -->
                 <div class="modal fade" v-for="(quiz, index) in quizList" :key="index" :id="'quizModal' + index">
                     <div class="modal-dialog modal-xl">
@@ -173,7 +190,6 @@ export default {
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped lang="scss">
