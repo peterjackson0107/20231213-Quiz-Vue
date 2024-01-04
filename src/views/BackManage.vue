@@ -239,9 +239,9 @@ export default {
               </div>
               <div class="content2">
                   <input type="text" id="surveyName" v-model="name" style="width: 660px; margin-top: 17px; font-size: 24px;"/><br/>
-                  <textarea cols="49" rows="6" id="surveyDescription" v-model="description" style="resize:none; font-size: 24px; margin-top: 40px;"></textarea><br/>
-                  <input type="date" id="startTime" v-model="startDate" style="font-size: 24px; margin-top: 39px;"/><br/>
-                  <input type="date" id="endTime" v-model="endDate" style="font-size: 24px; margin-top: 39px;"/><br/>
+                  <textarea cols="49" rows="6" id="surveyDescription" v-model="description" style="resize:none; font-size: 24px; margin-top: 50px;"></textarea><br/>
+                  <input type="date" id="startTime" v-model="startDate" style="font-size: 24px; margin-top: 45px;"/><br/>
+                  <input type="date" id="endTime" v-model="endDate" style="font-size: 24px; margin-top: 50px;"/><br/>
                   <button style="text-decoration: none; color: #557;; margin-right: 50px; font-size: 24px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;"><span>取消</span></RouterLink></button>
                   <button @click="changeTab('two')" style="margin-top: 29px; font-size: 24px;"><span>下一步</span></button>
               </div>
@@ -261,14 +261,14 @@ export default {
 
             <div class="content2">
                 <input type="text" id="question" v-model="question" style="width: 400px; margin-top: 19px; font-size: 24px;"/><br/>
-                <select id="questionType" v-model="questionType" style="font-size: 24px; margin-top: 40px;">
+                <select id="questionType" v-model="questionType" style="font-size: 24px; margin-top: 50px;">
                     <option value="單選題">單選題</option>
                     <option value="多選題">多選題</option>
                     <option value="簡答題">簡答題</option>
                 </select><br/>
-                <input type="text" id="option" v-model="option" style="width: 400px; font-size: 24px; margin-top: 43px;"/>
-                <span style="margin-left: 20px; font-size: 24px;">(選項請以 " ; " 分開)</span><br>
-                <input type="checkbox" id="isNecessary" v-model="isNecessary" style="margin-top: 55px;"/>
+                <input type="text" id="option" v-model="option" style="width: 400px; font-size: 24px; margin-top: 50px;"/>
+                <span style="margin-left: 10px; font-size: 24px;">(選項請以 " ; " 分開)</span><br>
+                <input type="checkbox" id="isNecessary" v-model="isNecessary" style="margin-top: 60px;"/>
                 <button @click="addOptions()" style="font-size: 24px; margin-left: 50px; margin-bottom: 20px;"><span>加入</span></button><br>
                 <!-- 刪除問題按钮 -->
                 <button @click="deleteSelectedQuestions()" style="margin-top: 20px;">
@@ -301,7 +301,7 @@ export default {
             
             <button style="text-decoration: none; font-size: 24px; margin-right: 50px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557;"><span>取消</span></RouterLink></button>
             <button @click="changeTab('three')" style="margin-top: 29px; font-size: 24px;"><span>前往確認頁</span></button><br>
-            {{ this.qAnswer }}
+            <!-- {{ this.qAnswer }} -->
         </div>
 
         <div id="three" class="tab-inner" v-if="tabID == 'three'">
@@ -426,7 +426,7 @@ label, p, button, select, tr, td, th, span{
           width: 70%;
           text-align: left;
           font-size: 24px;
-          line-height: 75px;
+          line-height: 80px;
         }
       }
       .down{

@@ -5,6 +5,7 @@ import counter from '../stores/counter'
 export default {
     data(){
         return {
+            //模糊搜尋
             searchText: "",
             searchStart: "",
             searchEnd: "",
@@ -16,7 +17,8 @@ export default {
             questionStr:[],
             //處理quizList的分頁
             currentPage: 1,
-            itemsPerPage: Math.ceil((Math.random())*(10-1+1)+1),
+            // itemsPerPage: 5, //一個分頁要多少問卷
+            itemsPerPage: Math.ceil(Math.random()*10), //一個分頁要多少問卷
         }
     },
     created() {
@@ -52,6 +54,8 @@ export default {
                 console.log(res.data.message)
                 this.quizList = res.data.quizList;
                 console.log(this.quizList);
+                this.quizList.sort((a, b) => b.num - a.num);
+                console.log(this.quizList);
                 // this.quizList[0].questionStr=JSON.parse(this.quizList[0].questionStr);  //JSON 字串，轉為 Javascript 物件或是值
                 this.quizList.forEach(element => {
                     // console.log(element);
@@ -69,7 +73,7 @@ export default {
                 console.log(this.quizList);
                 // console.log(this.quizList[0].questionStr[0].title);
                 //呼叫分頁的方法
-                paginationQuizlist();
+                // this.paginationQuizlist();
             })
             // 處理失敗的情況
         .catch((error) => {
@@ -84,7 +88,7 @@ export default {
         this.nowDate = dateObject.getFullYear() + '-' + (dateObject.getMonth() + 1).toString().padStart(2, '0') + '-' + (dateObject.getDate()).toString().padStart(2, '0');
         console.log(this.nowDate);
     },
-},
+    },
     computed: {
     ...mapState(counter, ["quizData"]),
     //處理quizList的分頁
@@ -92,8 +96,8 @@ export default {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     return this.quizList.slice(startIndex, endIndex);
-  },
-  },
+    },
+    },
 }
 </script>
 <template>
@@ -147,10 +151,10 @@ export default {
                 </div>
                 <button @click="currentPage -= 1" :disabled="currentPage === 1" style="margin-right: 10px;"><span>上一頁</span></button>
                 <span>{{ currentPage }}</span>
-                <button @click="currentPage += 1" :disabled="currentPage * itemsPerPage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
+                <button @click="currentPage += 1" :disabled="currentPage * itemsOfOnePage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
             </div>
-                <!-- 跳出視窗內容 -->
-                <div class="modal fade" v-for="(quiz, index) in quizList" :key="index" :id="'quizModal' + index">
+            <!-- 跳出視窗內容 -->
+            <div class="modal fade" v-for="(quiz, index) in paginationQuizlist" :key="index" :id="'quizModal' + index">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -162,7 +166,7 @@ export default {
                                     <span>{{ quiz.startDate }} ~ {{ quiz.endDate }}</span><br>
                                 </div>
                                 <div class="modalBodyList2">
-                                    <span>問卷說明: {{ quiz.description }}</span><br>
+                                    <span>{{ quiz.description }}</span><br>
                                 </div>
                                 <!-- 顯示問卷的問題和選項 -->
                                 <div class="modalBodyList3" v-for="(question, Index) in quiz.questionStr" :key="Index">
@@ -181,7 +185,7 @@ export default {
                                         </div>
                                     </div>
                                     <div v-if="question.type === '簡答題'">
-                                        <textarea cols="60" rows="6" disabled="disabled" v-model="question.shortAnswer" style="resize: none; margin-left: 30px;"></textarea>
+                                        <textarea cols="120" rows="10" disabled="disabled" v-model="question.shortAnswer" style="resize: none; margin-left: 30px;"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -219,25 +223,24 @@ span, button, p, label, select, tr, td, th{
             text-align: left;
         }
     }
-    .footer{
-    width: 50%;
-    height: 50%;
-    margin: 20px auto 0 auto;
-
     .modalBodyList{
         width: 100%;
         .modalBodyList1{
             text-align: end;
         }
         .modalBodyList2{
-            text-align: start;
+            text-align: center;
             margin-bottom: 10px;
         }
         .modalBodyList3{
-            width: 90%;
+            width: 100%;
             text-align: start;
         }
     }
+    .footer{
+    width: 50%;
+    height: 50%;
+    margin: 20px auto 0 auto;
     .list{
         width: 50vw;
     }

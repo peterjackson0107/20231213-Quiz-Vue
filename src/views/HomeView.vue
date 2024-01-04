@@ -1,4 +1,65 @@
 <script>
+import axios from 'axios';
+import { mapState, mapActions } from 'pinia'
+import counter from '../stores/counter'
+import Swal from "sweetalert2";
+export default {
+    data(){
+        return {
+            //login
+            account:"",
+            password:"",
+        }
+    },
+    created() {
+    },
+    mounted(){
+    },
+    methods: {
+    ...mapActions(counter, ["createData"]),
+    login(){
+        axios({
+            url:"http://localhost:8080/api/login",
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            data:{
+                account: this.account, //名字要跟quizReq一樣
+                password: this.password,
+            },
+        })
+        .then(
+            // 處理成功的情況
+            (res) => {
+                console.log(res);
+                console.log(res.data.rtncode);
+                console.log(res.data.message);
+                this.$router.push("/Back");
+                this.showAlert();
+            })
+            // 處理失敗的情況
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+            this.showAlert1()
+            });
+        },
+    showAlert() {
+        Swal.fire({
+            title: "成功!!!",
+            text: "登入成功!!!",
+            icon: "success",
+            });
+        },
+    showAlert1() {
+        Swal.fire({
+            title: "失敗!!!",
+            text: "登入失敗!!!",
+            icon: "question",
+            });
+        },
+    },
+    computed: {
+    },
+}
 </script>
 
 <template>
@@ -6,20 +67,19 @@
         <p>動態問卷 啟動</p>
         <button><RouterLink :to="`/Front`" class="rounterItem" style="text-decoration: none; color: #557; font-size: 24px;"><span>前台</span></RouterLink></button> 
         <button style=" margin-left: 50px;"><RouterLink :to="`/Back`" class="rounterItem" style="text-decoration: none; color: #557; font-size: 24px;"><span>後台</span></RouterLink></button>
-        <button style=" margin-left: 50px; text-decoration: none; color: #557; font-size: 24px;"><span>登入</span></button> 
     </div>
     <div class="footer">
         <div class="loginPage">
             <div class="loginLeft">
-                <label for="">Account</label><br>
-                <label for="">Password</label>
+                <label for="" style="color: #557; font-size: 24px;">Account：</label><br>
+                <label for="" style="color: #557; font-size: 24px;">Password：</label>
             </div>
             <div class="loginRight">
-                <input type="text" placeholder="A01"><br>
-                <input type="password" placeholder="AA123">
+                <input type="text" placeholder="A02" v-model="account" style="color: #557; font-size: 24px;"><br>
+                <input type="password" placeholder="AA123" v-model="password" style="color: #557; font-size: 24px; margin-top: 25px;">
             </div>
         </div>
-        <button type="submit" class="sumBtn">Log In</button>
+        <button type="submit" class="sumBtn" @click="login()" style="color: #557; font-size: 24px;">登入</button>
     </div>
 
 </template>
@@ -69,15 +129,15 @@
     height: 85vh;
     margin: 0 auto;
     .loginPage {
+        width: 100%;
+        height: 25%;
         display: flex;
         text-align: center;
         justify-content: center;
         align-items: center;;
         .loginLeft{
-
-        }
-        .loginRight{
-
+            line-height: 60px;
+            text-align: right;
         }
     }
 }

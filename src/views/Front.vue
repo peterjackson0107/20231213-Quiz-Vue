@@ -5,6 +5,7 @@ import counter from '../stores/counter'
 export default {
     data(){
         return {
+            //模糊搜尋
             searchText: "",
             searchStart: "",
             searchEnd: "",
@@ -16,7 +17,8 @@ export default {
             questionStr:[],
             //處理quizList的分頁
             currentPage: 1,
-            itemsPerPage: Math.ceil((Math.random())*(10-1+1)+1),
+            itemsOfOnePage: 5, //一個分頁要多少問卷
+            // itemsOfOnePage: Math.ceil(Math.random()*10), //一個分頁要多少問卷
         }
     },
     mounted(){
@@ -28,6 +30,7 @@ export default {
     },
     methods: {
     ...mapActions(counter, ["createData"]),
+    //搜尋全部問卷
     searchQuestion() {
         axios({
             url:"http://localhost:8080/quiz/search",
@@ -52,6 +55,9 @@ export default {
                 console.log(res.data.message)
                 this.quizList = res.data.quizList;
                 console.log(this.quizList);
+                //排序問卷
+                this.quizList.sort((a, b) => b.num - a.num);
+                console.log(this.quizList);
                 // this.quizList[0].questionStr=JSON.parse(this.quizList[0].questionStr);  //JSON 字串，轉為 Javascript 物件或是值
                 this.quizList.forEach(element => {
                     // console.log(element);
@@ -69,13 +75,14 @@ export default {
                 console.log(this.quizList);
                 // console.log(this.quizList[0].questionStr[0].title);
                 //呼叫分頁的方法
-                paginationQuizlist();
+                // this.paginationQuizlist();
             })
             // 處理失敗的情況
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
     },
+    // 抓現在當前日期
     getNowDate() {
         const today = new Date();
         // 西元年-月-日格式
@@ -84,16 +91,20 @@ export default {
         this.nowDate = dateObject.getFullYear() + '-' + (dateObject.getMonth() + 1).toString().padStart(2, '0') + '-' + (dateObject.getDate()).toString().padStart(2, '0');
         console.log(this.nowDate);
     },
-},
+    // 選擇頁數時，將當前頁數重置為 1
+    updatePage() {
+      this.currentPage = 1; 
+    },
+    },
     computed: {
     ...mapState(counter, ["quizData"]),
     //處理quizList的分頁
     paginationQuizlist() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.quizList.slice(startIndex, endIndex);
-  },
-  },
+        const startIndex = (this.currentPage - 1) * this.itemsOfOnePage;
+        const endIndex = startIndex + this.itemsOfOnePage;
+        return this.quizList.slice(startIndex, endIndex);
+        },
+    },
 }
 </script>
 <template>
@@ -103,14 +114,15 @@ export default {
                 <div class="content1">
                     <label for="questionName">問卷名稱：</label><br/>
                     <label for="time">統計時間：</label><br/>
-                    {{ this.itemsPerPage }}
+                    {{ this.itemsOfOnePage }}
                 </div>
                 <div class="content2">
                     <input type="text" id="" style="width: 660px; margin-top: 22px; font-size: 24px;" v-model="searchText"/><br/>
                     <input type="date" id="" style="font-size: 24px; margin-top: 39px;" v-model="searchStart"/>
                     <span style="margin-left: 30px ;">到</span>
                     <input type="date" id="" style="font-size: 24px; margin-top: 39px; margin-left:30px ;" v-model="searchEnd"/>
-                    <button type="submit" @click="searchQuestion" style="margin-left: 30px ;"><span>搜尋</span></button><br/></div>
+                    <button type="submit" @click="searchQuestion" style="margin-left: 30px ;"><span>搜尋</span></button><br/>
+                </div>
             </div>
             <div class="footer">
                 <div class="list">
@@ -142,10 +154,10 @@ export default {
                 </div>
                 <button @click="currentPage -= 1" :disabled="currentPage === 1" style="margin-right: 10px;"><span>上一頁</span></button>
                 <span>{{ currentPage }}</span>
-                <button @click="currentPage += 1" :disabled="currentPage * itemsPerPage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
+                <button @click="currentPage += 1" :disabled="currentPage * itemsOfOnePage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
             </div>
                 <!-- 跳出視窗內容 -->
-                <div class="modal fade" v-for="(quiz, index) in quizList" :key="index" :id="'quizModal' + index">
+                <div class="modal fade" v-for="(quiz, index) in paginationQuizlist" :key="index" :id="'quizModal' + index">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -157,34 +169,50 @@ export default {
                                     <span>{{ quiz.startDate }} ~ {{ quiz.endDate }}</span><br>
                                 </div>
                                 <div class="modalBodyList2">
-                                    <span>問卷說明: {{ quiz.description }}</span><br>
+                                    <span>{{ quiz.description }}</span><br>
+                                </div>    
+                                <div class="modalBodyList3">    
+                                    <div class="modalBodyList31">
+                                        <div class="modalBodyListLeft">
+                                            <label for="name">姓名：</label><br/>
+                                            <label for="phone">手機：</label><br/>
+                                            <label for="email">E-mail：</label><br/>
+                                            <label for="age">年齡：</label><br/>
+                                        </div>
+                                        <div class="modalBodyListRight">
+                                            <input type="text" id="name" style="width: 660px; margin-top: 5px; font-size: 24px;"/><br/>
+                                            <input type="text" id="phone" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
+                                            <input type="email" id="email" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
+                                            <input type="number" id="age" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- 顯示問卷的問題和選項 -->
-                                <div class="modalBodyList3" v-for="(question, Index) in quiz.questionStr" :key="Index">
+                                <div class="modalBodyList4" v-for="(question, Index) in quiz.questionStr" :key="Index">
                                     <p>{{ Index + 1 }}. {{ question.title }} ({{ question.necessary ? '必填' : '選填' }})</p>
                                     <!-- 根據題目類型顯示不同的選項 -->
                                     <div v-if="question.type === '單選題'">
                                         <div v-for="(option, optionIndex) in question.option.split(', ')" :key="optionIndex">
-                                            <input type="radio" :value="option" v-model="question.selectedOption" style="margin-left: 30px; margin-bottom: 20px;"/>
+                                            <input type="radio" :value="option" v-model="question.selectedOption" style="margin-left: 30px; margin-bottom: 20px; font-size: 24px;"/>
                                             <span style="margin-left: 20px;">{{ option }}</span>
                                         </div>
                                     </div>
                                     <div v-if="question.type === '多選題'">
                                         <div v-for="(option, oIndex) in question.option.split(', ')" :key="oIndex">
-                                            <input type="checkbox" :value="option" v-model="question.selectedOption[oIndex]" style="margin-left: 30px; margin-bottom: 20px;"/>
+                                            <input type="checkbox" :value="option" v-model="question.selectedOption[oIndex]" style="margin-left: 30px; margin-bottom: 20px; font-size: 24px;"/>
                                             <span style="margin-left: 10px;">{{ option }}</span>
                                         </div>
                                     </div>
                                     <div v-if="question.type === '簡答題'">
-                                        <textarea cols="60" rows="6" v-model="question.shortAnswer" style="resize: none; margin-left: 30px;"></textarea>
+                                        <textarea cols="75" rows="6" v-model="question.shortAnswer" style="resize: none; margin-left: 30px; font-size: 24px;"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
 </template>
 
 <style scoped lang="scss">
@@ -218,21 +246,7 @@ span, button, p, label, select, tr, td, th{
     width: 50%;
     height: 50%;
     margin: 20px auto 0 auto;
-
-    .modalBodyList{
-        width: 100%;
-        .modalBodyList1{
-            text-align: end;
-        }
-        .modalBodyList2{
-            text-align: start;
-            margin-bottom: 10px;
-        }
-        .modalBodyList3{
-            width: 90%;
-            text-align: start;
-        }
-    }
+}
     .list{
         width: 50vw;
     }
@@ -241,7 +255,39 @@ span, button, p, label, select, tr, td, th{
         align-items: center;
     }
 }
-}
-
-
+.modalBodyList{
+        width: 100%;
+        margin: 0 auto;
+        .modalBodyList1{
+            text-align: end;
+        }
+        .modalBodyList2{
+            text-align: center;
+        }
+        .modalBodyList3{
+            text-align: start;
+            margin-bottom: 10px;
+        }
+        .modalBodyList3{
+            width: 100%;
+            text-align: start;
+            .modalBodyList31{
+                display: flex;
+                .modalBodyListLeft{
+                    width: 10%;
+                    font-size: 24px;
+                    text-align: left;
+                    line-height: 50px;
+                }
+                .modalBodyListRight{
+                    width: 90%;
+                    text-align: left;
+                }
+            }
+        }
+        .modalBodyList4{
+            width: 100%;
+            text-align: start;
+        }
+    }
 </style>
