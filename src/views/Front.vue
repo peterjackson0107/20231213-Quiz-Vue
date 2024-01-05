@@ -17,7 +17,7 @@ export default {
             questionStr:[],
             //處理quizList的分頁
             currentPage: 1,
-            itemsOfOnePage: 5, //一個分頁要多少問卷
+            itemsOfOnePage: 10, //一個分頁要多少問卷
             // itemsOfOnePage: Math.ceil(Math.random()*10), //一個分頁要多少問卷
         }
     },
@@ -141,13 +141,13 @@ export default {
                             <tr v-for="(quiz, index) in paginationQuizlist" :key="index">
                                 <td>{{ quiz.num }}</td>
                                 <td>{{ quiz.name }}</td>
-                                <td class="font state" v-if="quiz.startDate > this.nowDate">尚未開始</td>
+                                <td class="font state" v-if="quiz.startDate > this.nowDate" style="color: red;">尚未開始</td>
                                 <td class="font state" v-if="quiz.startDate <= this.nowDate && this.nowDate <= quiz.endDate">進行中</td>
-                                <td class="font state" v-if="quiz.endDate < this.nowDate">已結束</td>
+                                <td class="font state" v-if="quiz.endDate < this.nowDate" style="color">已結束</td>
                                 <td>{{ quiz.startDate }}</td>
                                 <td>{{ quiz.endDate }}</td>
                                 <!-- 按鈕 -->
-                                <td><button type="button" data-bs-toggle="modal" :data-bs-target="'#quizModal' + index" style="border: 0; background-color: rgb(194, 190, 190);">查看</button></td>
+                                <td><button type="button" data-bs-toggle="modal" :data-bs-target="'#quizModal' + index" :disabled="quiz.startDate > this.nowDate || quiz.endDate < this.nowDate" style="border: 0; background-color: rgb(194, 190, 190);">查看</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -180,10 +180,10 @@ export default {
                                             <label for="age">年齡：</label><br/>
                                         </div>
                                         <div class="modalBodyListRight">
-                                            <input type="text" id="name" style="width: 660px; margin-top: 5px; font-size: 24px;"/><br/>
-                                            <input type="text" id="phone" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
-                                            <input type="email" id="email" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
-                                            <input type="number" id="age" style="width: 660px; margin-top: 18px; font-size: 24px;"/><br/>
+                                            <input type="text" id="name" style="width: 900px; margin-top: 5px; font-size: 24px;"/><br/>
+                                            <input type="text" id="phone" style="width: 900px; margin-top: 18px; font-size: 24px;"/><br/>
+                                            <input type="email" id="email" style="width: 900px; margin-top: 18px; font-size: 24px;"/><br/>
+                                            <input type="number" id="age" style="width: 900px; margin-top: 18px; font-size: 24px;"/><br/>
                                         </div>
                                     </div>
                                 </div>

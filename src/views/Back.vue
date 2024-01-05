@@ -140,7 +140,7 @@ export default {
                                 <td>{{ quiz.name }}</td>
                                 <td class="font state" v-if="quiz.startDate > this.nowDate">尚未開始</td>
                                 <td class="font state" v-if="quiz.startDate <= this.nowDate && this.nowDate <= quiz.endDate">進行中</td>
-                                <td class="font state" v-if="quiz.endDate < this.nowDate">已結束</td>
+                                <td class="font state" v-if="quiz.endDate < this.nowDate" style="color: ;">已結束</td>
                                 <td>{{ quiz.startDate }}</td>
                                 <td>{{ quiz.endDate }}</td>
                                 <!-- 按鈕 -->
