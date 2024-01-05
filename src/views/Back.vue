@@ -107,7 +107,7 @@ export default {
                 <div class="content1">
                     <label for="questionName">問卷名稱：</label><br/>
                     <label for="time">統計時間：</label><br/>
-                    {{ this.itemsPerPage }}
+                    <p style="margin-right: 50px;">{{ this.itemsPerPage }}</p>
                 </div>
                 <div class="content2">
                     <input type="text" id="searchText" style="width: 660px; margin-top: 22px; font-size: 24px;" v-model="searchText"/><br/>
