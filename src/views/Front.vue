@@ -57,7 +57,7 @@ export default {
                 console.log(this.quizList);
                 //排序問卷
                 this.quizList.sort((a, b) => b.num - a.num);
-                console.log(this.quizList);
+                // console.log(this.quizList);
                 // this.quizList[0].questionStr=JSON.parse(this.quizList[0].questionStr);  //JSON 字串，轉為 Javascript 物件或是值
                 this.quizList.forEach(element => {
                     // console.log(element);
@@ -72,7 +72,7 @@ export default {
                             question.shortAnswer = '';
                         }});
                 });
-                console.log(this.quizList);
+                // console.log(this.quizList);
                 // console.log(this.quizList[0].questionStr[0].title);
                 //呼叫分頁的方法
                 // this.paginationQuizlist();
@@ -157,7 +157,7 @@ export default {
                 <button @click="currentPage += 1" :disabled="currentPage * itemsOfOnePage >= quizList.length" style="margin-left: 10px;"><span>下一頁</span></button>
             </div>
                 <!-- 跳出視窗內容 -->
-                <div class="modal fade" v-for="(quiz, index) in paginationQuizlist" :key="index" :id="'quizModal' + index">
+                <div class="modal fade" data-bs-keyboard="false" tabindex="-1" :id="'quizModal' + index" aria-labelledby="staticBackdropLabel" aria-hidden="true" v-for="(quiz, index) in paginationQuizlist" :key="index">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -207,6 +207,26 @@ export default {
                                         <textarea cols="75" rows="6" v-model="question.shortAnswer" style="resize: none; margin-left: 30px; font-size: 24px;"></textarea>
                                     </div>
                                 </div>
+                                <!-- 按鈕-彈出問卷確認頁 -->
+                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#quizModal2' + index" style="border: 0; background-color: rgb(194, 190, 190);">前往確認頁</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 問卷確認頁 -->
+                <div class="modal fade" :id="'quizModal2' + index" tabindex="-1" v-for="(quiz, index) in paginationQuizlist" :key="index">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalToggleLabel2">問卷確認頁</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, eligendi?
+                            </div>
+                            <div class="modal-footer">
+                                <!-- 使用 data-bs-dismiss 來關閉當前模態框 -->
+                                <button type="button" data-bs-dismiss="modal">Back to first</button>
                             </div>
                         </div>
                     </div>

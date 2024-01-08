@@ -39,6 +39,11 @@ const router = createRouter({
       name: 'BackManage',
       component: () => import('../views/BackManage.vue')
     },
+    {
+      path: '/BackManage4',
+      name: 'BackManage4',
+      component: () => import('../views/BackManage4.vue')
+    },
   ]
 })
 

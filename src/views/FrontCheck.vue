@@ -47,33 +47,33 @@ methods: {
 <template>
     <div class="time">
         <p>問卷填寫時間</p>
-        <span>{{ writerData.qDate }}</span>
+        <span></span>
     </div>
     <div class="title">
         <p>問卷名稱</p>
-        <span>{{ writerData.qTitle }}</span>
+        <span></span>
     </div>
     <div class="produce">
         <p>問卷介紹</p>
-        <span>{{ writerData.qText }}</span>
+        <span></span>
     </div>
     <div class="content">
         <div class="information">
             <div class="one">
                 <label>姓名：</label>
-                <span>{{ writerData.name }}</span>
+                <span></span>
             </div>
             <div class="two">
                 <label>手機：</label>
-                <span>{{ writerData.tel }}</span>
+                <span></span>
             </div>
             <div class="three">
                 <label>E-mail：</label>
-                <span>{{ writerData.email }}</span>
+                <span></span>
             </div>
             <div class="four">
                 <label>年齡：</label>
-                <span>{{ writerData.age }}</span>
+                <span></span>
             </div>
         </div>
         <div class="question">

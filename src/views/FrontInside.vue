@@ -32,33 +32,33 @@ export default {
   <div class="question">
     <div class="time">
       <p>問卷填寫時間</p>
-      <input type="time" v-model="this.writerData.qDate" />
+      <input type="time"/>
     </div>
     <div class="title">
       <p>問卷名稱</p>
-      <input type="text" class="titleIn" v-model="this.writerData.qTitle" />
+      <input type="text" class="titleIn"/>
     </div>
     <div class="produce">
       <p>問卷說明</p>
-      <textarea name="" id="" cols="10" rows="10" v-model="this.writerData.qText"></textarea>
+      <textarea name="" id="" cols="10" rows="10"></textarea>
     </div>
     <div class="content">
       <div class="information">
         <div class="one">
           <label>姓名：</label>
-          <input type="text" required name="name" id="name" v-model="this.writerData.name"/>
+          <input type="text" required name="name" id="name"/>
         </div>
         <div class="two">
           <label>手機：</label>
-          <input type="tel" required name="tel" id="tel" v-model="this.writerData.tel"/>
+          <input type="tel" required name="tel" id="tel"/>
         </div>
         <div class="three">
           <label>E-mail：</label>
-          <input type="email" required name="email" id="email" v-model="this.writerData.email"/>
+          <input type="email" required name="email" id="email"/>
         </div>
         <div class="four">
           <label>年齡：</label>
-          <input type="number" required name="age" id="age" v-model="this.writerData.age"/>
+          <input type="number" required name="age" id="age"/>
         </div>
       </div>
       <div class="question">
