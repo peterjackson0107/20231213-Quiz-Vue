@@ -2,10 +2,10 @@
 export default {
   data() {
     return {
-      objPlayMovie: [],
-      objComeMovie: [],
-      directors: [],
-      cast: [],
+      objPlayMovies: [],
+      objComeMovies: [],
+      objPlayPerson: [],
+      objComePerson: [],
       comments: [
         //先放假資料
         { id: 1, text: "good!!!", likes: 100, dislikes: 0, timestamp: Date.now() - 1000 * 60 * 5, replies: [], editing: false, },
@@ -36,7 +36,7 @@ export default {
     },
   },
   methods: {
-    async getPlayMovie() { //熱映中電影
+    async getPlayMovie() { //上映中
       const options = {
         method: "GET",
         headers: {
@@ -47,13 +47,13 @@ export default {
       };
 
       let page = 1;
-      let count = 2; //要抓的電影數
+      let count = 30; //要抓的電影數
       let playingMovies = [];
 
       try {
-        const currentDate = new Date();
-        const oneMonth = new Date();
-        oneMonth.setMonth(currentDate.getMonth() - 2);
+        const nowDate = new Date();
+        const twoMonth = new Date();
+        twoMonth.setMonth(nowDate.getMonth() - 2);
 
         while (playingMovies.length < count) {
           const api = `https://api.themoviedb.org/3/movie/now_playing?language=zh-TW&page=${page}`;
@@ -65,7 +65,7 @@ export default {
           const data = await response.json();
           const moviesOnPage = data.results.filter((movie) => {
             const releaseDate = new Date(movie.release_date);
-            return releaseDate >= oneMonth && releaseDate <= currentDate;
+            return releaseDate >= twoMonth && releaseDate <= nowDate;
           });
           playingMovies = playingMovies.concat(moviesOnPage);
           if (page < data.total_pages) {
@@ -75,13 +75,13 @@ export default {
           }
         }
         const playMovies = playingMovies.slice(0, count);
-        this.objPlayMovie = playMovies;
-        console.log(this.objPlayMovie);
+        this.objPlayMovies = playMovies;
+        console.log('上映中 PlayMovies:', this.objPlayMovies);
       } catch (error) {
         console.error(error);
       }
     },
-    async getComeMovie() { //即將上映電影
+    async getComeMovie() { //即將上映
       const options = {
         method: "GET",
         headers: {
@@ -92,13 +92,13 @@ export default {
       };
 
       let page = 1;
-      let count = 2; //要抓的電影數
+      let count = 30; //要抓的電影數
       let comingMovies = [];
 
       try {
-        const currentDate = new Date();
+        const nowDate = new Date();
         const oneMonth = new Date();
-        oneMonth.setMonth(currentDate.getMonth() + 1);
+        oneMonth.setMonth(nowDate.getMonth() + 1);
 
         while (comingMovies.length < count) {
           const api = `https://api.themoviedb.org/3/movie/upcoming?language=zh-TW&page=${page}`;
@@ -110,7 +110,7 @@ export default {
           const data = await response.json();
           const moviesOnPage = data.results.filter((movie) => {
             const releaseDate = new Date(movie.release_date);
-            return releaseDate >= currentDate && releaseDate <= oneMonth;
+            return releaseDate >= nowDate && releaseDate <= oneMonth;
           });
           comingMovies = comingMovies.concat(moviesOnPage);
           if (page < data.total_pages) {
@@ -121,13 +121,13 @@ export default {
         }
         // 截取前 count 筆資料
         const comeMovies = comingMovies.slice(0, count);
-        this.objComeMovie = comeMovies;
-        console.log(this.objComeMovie);
+        this.objComeMovies = comeMovies;
+        console.log('即將上映 ComeMovies:', this.objComeMovies);
       } catch (error) {
         console.error(error);
       }
     },
-    getPerson() { //演員*5 + 導演*1
+    getPlayPerson(movieId) { //上映中 演員*5 + 導演*1
       const options = {
         method: "GET",
         headers: {
@@ -137,22 +137,61 @@ export default {
         },
       };
 
-      fetch(`https://api.themoviedb.org/3/movie/1029575/credits?language=en-US`, options)
-      // fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, options)
+      // fetch(`https://api.themoviedb.org/3/movie/1029575/credits?language=en-US`, options)
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, options)
         .then((response) => response.json())
-        .then((creditsData) => {
-          const directors = creditsData.crew.filter(
+        .then((response) => {
+          const directors = response.crew.filter(
             (person) => person.job === "Director"
           );
-          const cast = creditsData.cast.slice(0, 5);
+          const cast = response.cast.slice(0, 5);
           console.log(directors);
           console.log(cast);
+
+          let playPeople = [];
+          playPeople.push(directors);
+          playPeople.push(cast);
+          this.objPlayPerson.push(playPeople);
+          // console.log('最後的人員 comingPeople', playPeople);
+          console.log('全部電影的上映中 演員 objPlayPerson', this.objPlayPerson);
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    getTrailer(movieId) { //預告片
+    getComePerson(movieId) { //即將上映 演員*5 + 導演*1
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTBiNGVhYWYyMjVhZTdmYzFhNjdjYzk0ODk5Mjk5OSIsInN1YiI6IjY1N2ZjYzAzMGU2NGFmMDgxZWE4Mjc3YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3d6GcXTBf2kwGx9GzG7O4_8eCoHAjGxXNr9vV1lVXww",
+        },
+      };
+
+      // fetch(`https://api.themoviedb.org/3/movie/1029575/credits?language=en-US`, options)
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, options)
+        .then((response) => response.json())
+        .then((response) => {
+          const directors = response.crew.filter(
+            (person) => person.job === "Director"
+          );
+          const cast = response.cast.slice(0, 5);
+          console.log(directors);
+          console.log(cast);
+
+          let comePeople = [];
+          comePeople.push(directors);
+          comePeople.push(cast);
+          this.objComePerson.push(comePeople);
+          // console.log('最後的人員 comePeople', comePeople);
+          console.log('全部電影的即將上映 演員 objComePerson', this.objComePerson);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getPlayTrailer(movieId) { //上映中 預告片
       const options = {
         method: "GET",
         headers: {
@@ -164,13 +203,35 @@ export default {
 
       // fetch(`https://api.themoviedb.org/3/movie/1029575/videos?language=en-US`, options)
       fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, options)
-        .then((videosData) => {
-          const firstTrailerKey = videosData.results.find(
-            (video) => video.type === "Trailer"
-          )?.key;
+        .then((response) => {
+          const firstTrailerKey = response.results.find( (video) => video.type === "Trailer" )?.key;
 
           const trailerLink = `https://www.youtube.com/watch?v=${firstTrailerKey}`;
 
+          console.log('PlayTrailerLink', trailerLink);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getComeTrailer(movieId) { //即將上映 預告片
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTBiNGVhYWYyMjVhZTdmYzFhNjdjYzk0ODk5Mjk5OSIsInN1YiI6IjY1N2ZjYzAzMGU2NGFmMDgxZWE4Mjc3YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3d6GcXTBf2kwGx9GzG7O4_8eCoHAjGxXNr9vV1lVXww",
+        },
+      };
+
+      // fetch(`https://api.themoviedb.org/3/movie/1029575/videos?language=en-US`, options)
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, options)
+        .then((response) => {
+          const firstTrailerKey = response.results.find( (video) => video.type === "Trailer" )?.key;
+
+          const trailerLink = `https://www.youtube.com/watch?v=${firstTrailerKey}`;
+
+          console.log(response);
           console.log(trailerLink);
         })
         .catch((error) => {
@@ -278,28 +339,42 @@ export default {
     },
     
   },
-  mounted() {
-    this.getPlayMovie();
-    this.getComeMovie();
-    setTimeout(() => {
-    this.objPlayMovie.forEach((item) => {
-      this.getPerson(item.id);
-    });
-  }, 2000);
+  async mounted() {
+    await this.getPlayMovie();
+    await this.getComeMovie();
+
+    for (const item of this.objPlayMovies) {
+    await this.getPlayPerson(item.id);
+  }
+
+  for (const item of this.objComeMovies) {
+    await this.getComePerson(item.id);
+  }
+
+  //   setTimeout(() => {
+  //   this.objPlayMovies.forEach((item) => {
+  //     this.getPlayPerson(item.id);
+  //     // this.getPlayTrailer(item.id);
+  //   });
+  // }, 3000);
+  //   setTimeout(() => {
+  //   this.objComeMovies.forEach((item) => {
+  //     this.getComePerson(item.id);
+  //     // this.getComeTrailer(item.id);
+  //   });
+  // }, 3000);
   },
 };
 </script>
 
 <template>
+<!-- 電影資料 -->
+  <div class="movieData">
   <button type="button"  @click="getPlayMovie()">按我看正在上映</button>
   <button type="button" @click="getComeMovie()">按我看即將上映</button>
-  <button type="button" @click="getPerson()">按我看導演+演員</button>
-  <!-- {{ this.objPlayMovie }} -->
-  <!-- {{ this.objComeMovie }} -->
 
-  <!-- 電影資料 -->
-  <div class="movieData">
-    <table border="1" style="width: 50vw; margin: auto; color: #557">
+  
+    <table border="1" style="width: 60vw; margin: auto; color: #557">
       <thead style="background-color: rgb(194, 190, 190)">
         <th>id</th>
         <th>海報</th>
@@ -307,9 +382,11 @@ export default {
         <th>名稱</th>
         <th>簡介</th>
         <th>上映日期</th>
+        <th>導演</th>
+        <th>演員</th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) of this.objPlayMovie" :key="index">
+        <tr v-for="(item, index) of this.objPlayMovies" :key="index">
           <td>{{ item.id }}</td>
           <td>
             <!-- w92/w154/w185/w342/w500/original(原圖大小) -->
@@ -320,20 +397,23 @@ export default {
           <td class="font state" v-if="item.overview === ''">此電影無簡介</td>
           <td class="font state" v-if="item.overview !== ''">{{ item.overview }}</td>
           <td>{{ item.release_date }}</td>
+          <td>
+            <div v-for="(item, index1) of this.objPlayPerson" :key="index1">
+              {{ item.original_name }}
+            </div>
+          </td>
+          <td>
+            <div v-for="(item, index2) of this.objPlayPerson" :key="index2">
+              {{ item.original_name }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <div class="personData" style="height: 20vh;">
-      <!-- 導演演員資料 -->
-      <div class="director">
-        <span>{{ this.directors.original_name }}</span>
       </div>
-      <div class="cast" v-for="(item, index) of this.cast" :key="index">
-        <span>{{ item.original_name }}</span>  
-      </div>
-    </div>
-  </div>
+
+
 
   <!-- 討論區 -->
   <div class="container">

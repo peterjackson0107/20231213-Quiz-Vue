@@ -40,10 +40,16 @@ const router = createRouter({
       component: () => import('../views/BackManage.vue')
     },
     {
-      path: '/BackManage4',
-      name: 'BackManage4',
-      component: () => import('../views/BackManage4.vue')
+      path: '/movie',
+      name: 'movie',
+      component: () => import('../views/Movie.vue')
     },
+    {
+      path: '/moviecomment',
+      name: 'moviecomment',
+      component: () => import('../views/MovieComment.vue')
+    },
+    
   ]
 })
 
