@@ -47,7 +47,7 @@ export default {
       };
 
       let page = 1;
-      let count = 30; //要抓的電影數
+      let count = 2; //要抓的電影數
       let playingMovies = [];
 
       try {
@@ -92,7 +92,7 @@ export default {
       };
 
       let page = 1;
-      let count = 30; //要抓的電影數
+      let count = 2; //要抓的電影數
       let comingMovies = [];
 
       try {

@@ -4,24 +4,27 @@ export default {
     return {
       objPlayMovies: [],
       objComeMovies: [],
+      objPopularMovies: [],
       itemsPerSlide: 3, // 每頁顯示的輪播項目數量
+      currentSlide: 0,
     };
   },
   computed: {
     playPerPage() {
-      let chunks = [];
-      for (let i = 0; i < this.objPlayMovies.length; i += this.itemsPerSlide) {
-        chunks.push(this.objPlayMovies.slice(i, i + this.itemsPerSlide));
+      let cutArray = [];
+      for (let i = 0; i < this.objPlayMovies.length; i++) {
+        cutArray.push(this.objPlayMovies.slice(i, i + this.itemsPerSlide));
       }
-      return chunks;
+      return cutArray;
     },
     comePerPage() {
-      let chunks = [];
-      for (let i = 0; i < this.objComeMovies.length; i += this.itemsPerSlide) {
-        chunks.push(this.objComeMovies.slice(i, i + this.itemsPerSlide));
+      let cutArray = [];
+      for (let i = 0; i < this.objComeMovies.length; i++) {
+        cutArray.push(this.objComeMovies.slice(i, i + this.itemsPerSlide));
       }
-      return chunks;
+      return cutArray;
     },
+    
 },
   methods: {
     async getPlayMovie() { //上映中
@@ -115,56 +118,100 @@ export default {
         console.error(error);
       }
     },
+    async getPopularMovie() { //歷史熱門電影
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTBiNGVhYWYyMjVhZTdmYzFhNjdjYzk0ODk5Mjk5OSIsInN1YiI6IjY1N2ZjYzAzMGU2NGFmMDgxZWE4Mjc3YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3d6GcXTBf2kwGx9GzG7O4_8eCoHAjGxXNr9vV1lVXww'
+        }
+      };
+
+      let page = 1;
+      let count = 30; //要抓的電影數
+      let popularMovies = [];
+
+      try {
+        while (popularMovies.length < count) {
+          const api = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=${page}&sort_by=revenue.desc`;
+          const response = await fetch(api, options);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          const moviesOnPage = data.results
+          popularMovies = popularMovies.concat(moviesOnPage);
+          if (page < data.total_pages) {
+            page++;
+          } else {
+            break;
+          }
+        }
+        // 截取前 count 筆資料
+        const popularMovie = popularMovies.slice(0, count);
+        this.objPopularMovies = popularMovie;
+        console.log('最受歡迎 popularMovies:', this.objPopularMovies);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    chooseMovie(x){
+      console.log(x)
+    },
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.itemscutArray.length;
+    },
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.itemscutArray.length) % this.itemscutArray.length;
+    },
+  
   },
   async mounted() {
     await this.getPlayMovie();
     await this.getComeMovie();
+    await this.getPopularMovie();
   },
 };
 </script>
 
 <template>
-<span>近期上映電影</span>
+  
+<h1>近期上映電影</h1>
 <div class="container mt-5">
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div v-for="(itemsChunk, index) in playPerPage" :key="index" :class="['carousel-item', index === 0 ? 'active' : '']">
+        <div v-for="(itemsChunk, index) in playPerPage" :key="index" :class="['carousel-item', index === currentSlide ? 'active' : '']">
           <div class="row">
             <div v-for="(item, innerIndex) in itemsChunk" :key="innerIndex" class="col-md-4">
-              <a>
-                <RouterLink to="MovieComment">
-                  <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" class="d-block w-100" alt="Slide {{innerIndex + 1}}">
-                </RouterLink>
+              <a @click="chooseMovie(item)">
+                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" class="d-block w-100" alt="">
               </a>
               <div class="carousel-caption d-none d-md-block">
-                <h5>{{ item.title }}</h5>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" @click="prevSlide">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" @click="nextSlide">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
     </div>
   </div>
 
-<span>熱映中電影</span>
+<h1>熱映中電影</h1>
 <div class="container mt-5">
     <div id="carouselExample1" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div v-for="(itemsChunk, index) in comePerPage" :key="index" :class="['carousel-item', index === 0 ? 'active' : '']">
+        <div v-for="(itemsChunk, index) in comePerPage" :key="index" :class="['carousel-item', index === currentSlide ? 'active' : '']">
           <div class="row">
             <div v-for="(item, innerIndex) in itemsChunk" :key="innerIndex" class="col-md-4">
-              <a>
-                <RouterLink to="MovieComment">
-                  <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" class="d-block w-100" alt="Slide {{innerIndex + 1}}">
-                </RouterLink>
+              <a @click="chooseMovie(item)">
+                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" class="d-block w-100" alt="">
               </a>
               <div class="carousel-caption d-none d-md-block">
               </div>
@@ -172,21 +219,19 @@ export default {
           </div>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev" @click="prevSlide">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next" @click="nextSlide">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
     </div>
   </div>
 
-<span>為你推薦</span>
-
-
-<span>分類選擇</span>
+<h1>為你推薦</h1><br>
+<h1>分類選擇</h1>
 
 
 </template>
@@ -195,6 +240,6 @@ export default {
 span, button, p, label, select {
   font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
   color: #557;
-  font-size: 50px;
+  font-size: 18px;
 }
 </style>

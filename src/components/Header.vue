@@ -18,8 +18,9 @@ export default {
     <RouterLink to="/FrontStatistics" class="link">前台統計</RouterLink>
     <RouterLink to="/Back" class="link">後台</RouterLink>
     <RouterLink to="/BackManage" class="link">後台管理</RouterLink>
-    <RouterLink to="/Movie" class="link">電影</RouterLink>
+    <RouterLink to="/Movie" class="link">電影首頁</RouterLink>
     <RouterLink to="/MovieComment" class="link">電影評論</RouterLink>
+    <RouterLink to="/MovieTest" class="link">單一電影</RouterLink>
   </div>
 </template>
 

@@ -40,16 +40,20 @@ const router = createRouter({
       component: () => import('../views/BackManage.vue')
     },
     {
-      path: '/movie',
-      name: 'movie',
+      path: '/Movie',
+      name: 'Movie',
       component: () => import('../views/Movie.vue')
     },
     {
-      path: '/moviecomment',
-      name: 'moviecomment',
+      path: '/MovieComment',
+      name: 'MovieComment',
       component: () => import('../views/MovieComment.vue')
     },
-    
+    {
+      path: '/MovieTest',
+      name: 'MovieTest',
+      component: () => import('../views/MovieTest.vue')
+    },
   ]
 })
 
