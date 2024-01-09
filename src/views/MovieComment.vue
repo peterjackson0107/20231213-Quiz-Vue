@@ -6,18 +6,6 @@ export default {
       objComeMovies: [],
       objPlayPerson: [],
       objComePerson: [],
-      comments: [
-        //先放假資料
-        { id: 1, text: "good!!!", likes: 100, dislikes: 0, timestamp: Date.now() - 1000 * 60 * 5, replies: [], editing: false, },
-        { id: 2, text: "what???", likes: 50, dislikes: 20, timestamp: Date.now() - 1000 * 86400 * 70, replies: [], editing: false, },
-        { id: 3, text: "bad...", likes: 0, dislikes: 100, timestamp: Date.now() - 1000 * 86400 * 700, replies: [], editing: false, },
-        // ...其他假留言...
-      ],
-      name: "John123456",
-      commentText: "",
-      sortOrder: "sort",
-      baoleiButton: false, //暴雷按鈕
-      blurredArea: true, //模糊區域
     };
   },
   computed: {
@@ -238,105 +226,7 @@ export default {
           console.error(error);
         });
     },
-    toggleBaolei() { //暴雷按鈕
-      this.baoleiButton = !this.baoleiButton;
-    },
-    addComment() { //新增留言
-      if (this.commentText.trim() !== "") {
-        this.comments.push({
-          id: this.comments.length + 1,
-          text: this.commentText,
-          likes: 0,
-          dislikes: 0,
-          timestamp: Date.now(),
-          replying: false,
-          replyText: "",
-          replies: [],
-        });
-        this.commentText = "";
-      }
-    },
-    commentTimeDif(timestamp) { //留言時間到現在時間差
-      const now = Date.now();
-      const timeDif = now - timestamp; 
-      const seconds = Math.floor(timeDif / 1000);
-
-      if (seconds < 60) {
-        return `${seconds}秒前`;
-      } else if (seconds < 3600) {
-        const minutes = Math.floor(seconds / 60);
-        return `${minutes}分鐘前`;
-      } else if (seconds < 86400) {
-        const hours = Math.floor(seconds / 3600);
-        return `${hours}小時前`;
-      } else if (seconds < 86400 * 30) {
-        const days = Math.floor(seconds / 86400);
-        return `${days}天前`;
-      }  else if (seconds < 86400 * 30 * 12) {
-        const months = Math.floor(seconds / (86400 * 30));
-        return `${months}個月前`;
-      } else {
-        return "1年前";
-      }
-    },
-    deleteComment(comment) { //刪除留言
-      const index = this.comments.indexOf(comment);
-      if (index !== -1) {
-        this.comments.splice(index, 1);
-      }
-    },
-    likeButton(comment) { //喜歡按鈕
-      comment.likes++;
-    },
-    dislikeButton(comment) { //不喜歡按鈕
-      comment.dislikes++;
-    },
-    commentTime(timestamp) { //回覆時間
-      const date = new Date(timestamp);
-      const options = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      };
-      return new Intl.DateTimeFormat("TW", options).format(date);
-    },
-    editComment(comment) { //編輯按鈕
-      this.commentText = comment.text;
-      comment.editing = true;
-    },
-    saveEdit(comment) { //儲存編輯按鈕
-      if (this.commentText.trim() !== "") {
-        comment.text = this.commentText;
-        comment.editing = false;
-        this.commentText = "";
-      }
-    },
-    replyComment(comment) { //回覆留言
-      comment.replying = true;
-    },
-    addReply(comment) { //回覆留言
-      if (comment.replyText.trim() !== "") {
-        comment.replies.push({
-          id: comment.replies.length + 1,
-          text: comment.replyText,
-          timestamp: Date.now(),
-        });
-        comment.replyText = "";
-        comment.replying = false;
-      }
-    },
-    deleteReply(comment, reply) { //刪除回覆
-      const index = comment.replies.indexOf(reply);
-      if (index !== -1) {
-        comment.replies.splice(index, 1);
-      }
-    },
-    resetBlur() { //暴雷背景模糊
-      this.blurredArea = false;
-    },
+    
     
   },
   async mounted() {
@@ -372,7 +262,6 @@ export default {
   <div class="movieData">
   <button type="button"  @click="getPlayMovie()">按我看正在上映</button>
   <button type="button" @click="getComeMovie()">按我看即將上映</button>
-
   
     <table border="1" style="width: 60vw; margin: auto; color: #557">
       <thead style="background-color: rgb(194, 190, 190)">
@@ -410,92 +299,7 @@ export default {
         </tr>
       </tbody>
     </table>
-
-      </div>
-
-
-
-  <!-- 討論區 -->
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8">
-        <!-- 暴雷區的開關 -->
-        <div class="mb-3">
-          <div class="form-check form-switch">
-            <input v-model="baoleiButton" @input="toggleBaolei" class="form-check-input" type="checkbox" id="baoleiSwitch"/>
-            <!-- <label class="form-check-label" for="baoleiSwitch">{{ baoleiButton ? '關閉' : '開啟' }}</label> -->
-            <label class="form-label">影評按鈕</label>
-          </div>
-        </div>
-        <!-- 留言區 -->
-        <div
-          :style="{ filter: blurredArea && !baoleiButton ? 'blur(5px)' : 'none', }">
-          <!-- 排序下拉框 -->
-          <div class="mb-3">
-            <span>{{ this.comments.length + "件留言" }}</span>
-            <select v-model="sortOrder" id="sortSelect">
-              <option value="sort">排序方式</option>
-              <option value="latest">最新</option>
-              <option value="likes">喜歡數</option>
-            </select>
-          </div>
-
-          <!-- 新增留言 -->
-          <form @submit.prevent="addComment" class="mt-4">
-            <div class="mb-3">
-              <label for="commentInput" class="form-label"><span>新增留言</span></label>
-              <textarea rows="1" v-model="commentText" class="form-control" id="commentInput" required style=" resize: none; border: 0; background: none; border-bottom: 1px solid black; "></textarea>
-            </div>
-            <button type="submit" class="btn btn-outline-dark">留言</button>
-          </form>
-          <!-- 遍歷並顯示留言 -->
-          <div v-for="comment in sortedComments" :key="comment.id" class="card mb-2">
-            <!-- 留言內容 -->
-            <div class="card-body">
-              <span>{{ "@" + this.name }}</span>
-              <small class="text-muted">{{ commentTimeDif(comment.timestamp) }}</small><br/>
-              <span>{{ comment.text }}</span>
-              <button @click="editComment(comment)" class="btn btn-link" style="text-decoration: none">
-                編輯
-              </button>
-              <button @click="deleteComment(comment)" class="btn btn-link" style="text-decoration: none">刪除</button><br />
-              <button @click="likeButton(comment)" class="btn btn-outline-primary" style="border: 0">
-                <i class="fa-regular fa-thumbs-up"></i>{{ comment.likes }}
-              </button>
-              <button @click="dislikeButton(comment)" class="btn btn-outline-danger" style="border: 0">
-                <i class="fa-regular fa-thumbs-down"></i>{{ comment.dislikes }}
-              </button>
-              <button @click="replyComment(comment)" class="btn btn-link" style="text-decoration: none; margin-left: 5px">回覆</button>
-              <button v-if="comment.editing" @click="saveEdit(comment)" class="btn btn-link" style="text-decoration: none">儲存</button>
-
-              <!-- 顯示回覆的區域 -->
-              <div v-if="comment.replies.length > 0" class="mt-2">
-                <h6>回覆:</h6>
-                <!-- 遍歷並顯示回復 -->
-                <div v-for="reply in comment.replies" :key="reply.id" class="card mb-2">
-                  <!-- 回覆內容 -->
-                  <div class="card-body">
-                    <span>{{ "@" + this.name }}</span>
-                    <small class="text-muted">{{ commentTime(reply.timestamp) }}</small><br />
-                    <span>{{ reply.text }}</span>
-                    <button @click="deleteReply(comment, reply)" class="btn btn-link" style="text-decoration: none">刪除</button>
-                  </div>
-                </div>
-              </div>
-              <!-- 回覆留言的表單 -->
-              <form v-if="comment.replying" @submit.prevent="addReply(comment)" class="mt-2">
-                <div class="mb-3">
-                  <label for="replyInput" class="form-label">回覆留言</label>
-                  <textarea v-model="comment.replyText" class="form-control" id="replyInput" rows="2" required style="resize: none"></textarea>
-                </div>
-                <button type="submit">發送回覆</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 </template>
 
 <style lang="scss">
