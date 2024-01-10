@@ -2,10 +2,13 @@
 export default {
     data() {
         return {
-        //   objPlayMovies: [],
-        //   objComeMovies: [],
+        //電影相關
         objPlayPerson: [],
         objComePerson: [],
+        movieInfo: {},
+        objPerson: [],
+        objTrailer: [],
+        //評論區相關
         comments: [
             //先放假資料
             { id: 1, text: "good!!!", likes: 100, dislikes: 0, timestamp: Date.now() - 1000 * 60 * 5, replies: [], editing: false, },
@@ -340,7 +343,8 @@ export default {
         
     },
     mounted() {
-    
+      this.movieInfo = this.$route.query;
+      console.log('Movie Details:', this.movieInfo);
     },
 };
 </script>
@@ -348,10 +352,20 @@ export default {
 <template>
 <!-- 電影資料 -->
   <div class="movieData">
-  <button type="button"  @click="getPlayMovie()">按我看正在上映</button>
-  <button type="button" @click="getComeMovie()">按我看即將上映</button>
+    <button type="button"  @click="getPlayMovie()">按我看正在上映</button>
+    <button type="button" @click="getComeMovie()">按我看即將上映</button>
 
-      </div>
+    <!-- {{ this.movieInfo }} -->
+    {{ this.movieInfo.movieGenreid }}
+    {{ this.movieInfo.id }}
+    {{ this.movieInfo.movieOriginaltitle }}
+    {{ this.movieInfo.movieTitle }}
+    {{ this.movieInfo.movieOverview }}
+    <img :src="'https://image.tmdb.org/t/p/w92' + this.movieInfo.moviePoster" alt="">
+    <img :src="'https://image.tmdb.org/t/p/w92' + this.movieInfo.movieBack " alt="">
+    {{ this.movieInfo.movieReleasedate }}
+    {{ this.movieInfo.movieVoteavg }}
+  </div>
 
 
 
