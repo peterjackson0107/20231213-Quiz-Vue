@@ -45,8 +45,8 @@ const router = createRouter({
       component: () => import('../views/Movie.vue')
     },
     {
-      path: '/MovieComment',
-      name: 'MovieComment',
+      path: '/moviecomment',
+      name: 'moviecomment',
       component: () => import('../views/MovieComment.vue')
     },
     {
