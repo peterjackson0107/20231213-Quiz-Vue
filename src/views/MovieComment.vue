@@ -329,7 +329,7 @@ export default {
             <div class="form-check form-switch">
               <input v-model="baoleiButton" @input="toggleBaolei" class="form-check-input" type="checkbox" id="baoleiSwitch"/>
               <!-- <label class="form-check-label" for="baoleiSwitch">{{ baoleiButton ? '關閉' : '開啟' }}</label> -->
-              <label class="form-label">討論區按鈕</label>
+              <label class="form-label">暴雷按鈕</label>
             </div>
           </div>
           <!-- 留言區 -->
@@ -398,7 +398,7 @@ export default {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 span, button, p, label, select {
   font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
   color: #557;

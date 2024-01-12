@@ -279,10 +279,27 @@ export default {
             console.error(error);
             });
     },
-    chooseMovie(item) { //點擊電影抓此電影資訊
+    getMovieType() { //電影類型
+        const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZTBiNGVhYWYyMjVhZTdmYzFhNjdjYzk0ODk5Mjk5OSIsInN1YiI6IjY1N2ZjYzAzMGU2NGFmMDgxZWE4Mjc3YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3d6GcXTBf2kwGx9GzG7O4_8eCoHAjGxXNr9vV1lVXww'
+        }
+      };
+      fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+        .then((response) => response.json())
+        .then((response) => {
+          this.type = response.genres,
+          console.log(this.type)
+          console.log(this.movieType)
+        })
+        .catch(err => console.error(err));
+    },
+    chooseMovie(item) { //點電影飛去新路由
       console.log(item)
       this.$router.push({
-        name: 'moviecomment', // 新的路由
+        name: 'moviecomment',
         query: { 
           movieGenreid: item.genre_ids,
           movieId: item.id,
@@ -302,12 +319,12 @@ export default {
     prevSlide() {
       this.currentSlide = (this.currentSlide - 1 + this.itemscutArray.length) % this.itemscutArray.length;
     },
-  
   },
   async mounted() {
     await this.getPlayMovie();
     await this.getComeMovie();
     await this.getPopularMovie();
+    await this.ggetMovieType();
   },
 };
 </script>
@@ -390,7 +407,7 @@ export default {
 
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 span, button, p, label, select {
   font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
   color: #557;
