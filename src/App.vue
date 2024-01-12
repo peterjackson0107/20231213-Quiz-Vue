@@ -61,7 +61,7 @@ document.addEventListener("mousemove", function (e) {
 }
 .content {
   width: 100vw;
-  height: 300vh;
+  height: 400vh;
   text-align: center; //置中
   background-color: rgb(241, 234, 255);
 }

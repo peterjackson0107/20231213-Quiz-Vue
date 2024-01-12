@@ -258,55 +258,33 @@ export default {
     <!-- 電影資料 -->
     <div class="header">
       <div class="movieData">
-        <!-- <img :src="'https://image.tmdb.org/t/p/w342' + this.movieInfo.movieBack " alt="" style="width: 100vw; height: 20vh; opacity: 0.2; position: fixed; top: 0; left: 0;"><br> -->
+        <!-- <img :src="'https://image.tmdb.org/t/p/w342' + this.movieInfo.movieBack " alt="" style="width: 100vw; height: 100vh; opacity: 0.2; position: fixed; top: 0; left: 0;"><br> -->
         <div class="movieDataLeft">
           <img :src="'https://image.tmdb.org/t/p/w500' + this.movieInfo.moviePoster" alt=""/>
         </div>
         <div class="movieDataRight">
-          <h1>電影名稱：{{ this.movieInfo.movieTitle }}</h1>
+          <h1>{{ this.movieInfo.movieTitle }}</h1>
           <h6>{{ this.movieInfo.movieOriginaltitle }}</h6>
           <h2>上映日期：{{ this.movieInfo.movieReleasedate }}</h2>
-          <h2>電影類型：</h2>
-          <span v-for="(item,index) in this.movieType" :key="index">{{ item }}</span>
-          <h2>導演：</h2>
-          <p v-for="(item, index) in this.directors" :key="index">{{ item.original_name }}</p>
-          <h2>演員：</h2>
-          <span v-for="(item, index) in this.casts" :key="index">{{ item.original_name }}</span>
-          <h3>電影平均評分：{{ this.movieInfo.movieVoteavg }}</h3>
-          <h2>電影簡介：</h2>
-          <h4 v-if="this.movieInfo.movieOverview">{{ this.movieInfo.movieOverview }}</h4>
-          <h4 v-else>此電影無簡介</h4>
-
-          <!-- <table border="1" border-style="double" style="width: 95%;">
-              <tr>
-                <td><h2>電影名稱</h2></td>
-                <td>{{ this.movieInfo.movieTitle }}</td>
-              </tr>
-              <tr>
-                <th>上映日期</th>
-                <td>{{ this.movieInfo.movieReleasedate }}</td>
-              </tr>
-              <tr>
-                <th>電影類型</th>
-                <td v-for="(item,index) in this.movieType" :key="index">{{ item }}</td>
-              </tr>
-              <tr>
-                <th>導演</th>
-                <td v-for="(item, index) in this.directors" :key="index">{{ item.original_name }}</td>
-              </tr>
-              <tr>
-                <th>演員</th>
-                <td v-for="(item, index) in this.casts" :key="index">{{ item.original_name }}</td>
-              </tr>
-              <tr>
-                <th>電影平均評分</th>
-                <td>{{ this.movieInfo.movieVoteavg }}</td>
-              </tr>
-          </table>
-
-          <h2>電影簡介：</h2>
-          <span v-if="this.movieInfo.movieOverview">{{ this.movieInfo.movieOverview }}</span>
-          <span v-else>此電影無簡介</span> -->
+          <hr />
+          <h2>Movie Info</h2>
+          <div class="movieDataRight1">
+          <div class="movieDataRight11">
+            <h3>類型：</h3>
+            <h3>導演：</h3>
+            <h3>演員：</h3>
+            <h3>評分：</h3>
+            <h3>簡介：</h3>
+          </div>
+          <div class="movieDataRight22">
+            <span style="line-height: 50px;" v-for="(item,index) in this.movieType" :key="index">{{ item }}<span v-if="index < this.movieType.length - 1">,</span></span><br>
+            <span style="line-height: 65px;" v-for="(item, index) in this.directors" :key="index">{{ item.original_name }}<span v-if="index < this.directors.length - 1">,</span></span><br>
+            <span style="line-height: 50px;" v-for="(item, index) in this.casts" :key="index">{{ item.original_name }}<span v-if="index < this.casts.length - 1">,</span></span><br>
+            <h2 style="line-height: 65px;">{{ this.movieInfo.movieVoteavg }}</h2>
+            <h4 style="line-height: 40px;" v-if="this.movieInfo.movieOverview">{{ this.movieInfo.movieOverview }}</h4>
+            <h4 style="line-height: 40px;" v-else>此電影無簡介</h4>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -404,9 +382,14 @@ span, button, p, label, select {
   color: #557;
   font-size: 18px;
 }
-small {
+small, h1, h2, h3, h4, h5, h6 {
   font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
   color: #557;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
+  color: #557;
+  line-height: 50px;
 }
 span, button {
   margin: 10px 10px 10px 0;
@@ -460,23 +443,40 @@ span, button {
     .movieData {
       display: flex;
       .movieDataLeft {
-        width: 40%;
+        width: 35%;
         height: 90vh;
-        text-align: center;
-        align-items: center;
+        text-align: end;
+        align-items: end;
         margin-right: 50px;
       }
       .movieDataRight {
-        width: 60%;
+        width: 65%;
         height: 90vh;
         text-align: start;
         align-items: start;
+        .movieDataRight1{
+          width: 100%;
+          height: 20vh;
+          display: flex;
+            .movieDataRight11{
+              width: 10%;
+              height: 40vh;
+              text-align: start;
+              align-items: start;
+            }
+            .movieDataRight22{
+              width: 90%;
+              height: 40vh;
+              text-align: start;
+              align-items: start;
+          }
+        }
       }
     }
   }
   .middle {
     width: 95vw;
-    height: 85vh;
+    height: 80vh;
     margin: 0 auto;
   }
   .commentArea {
