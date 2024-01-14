@@ -369,11 +369,11 @@ export default {
           </div>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" @click="prevSlide" style="left: -150px;">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" @click="prevSlide" style="left: -150px; top: 250px;">
         <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-left" style="font-size: 50px;"></i></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" @click="nextSlide" style="right: -150px;">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" @click="nextSlide" style="right: -150px; top: 250px;">
         <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-right" style="font-size: 50px"></i></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -404,11 +404,11 @@ export default {
           </div>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev" @click="prevSlide" style="left: -150px;">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev" @click="prevSlide" style="left: -150px; top: 250px;">
         <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-left" style="font-size: 50px;"></i></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next" @click="nextSlide" style="right: -150px;">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next" @click="nextSlide" style="right: -150px; top: 250px;">
         <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-right" style="font-size: 50px"></i></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -439,11 +439,11 @@ export default {
           </div>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample2" data-bs-slide="prev" @click="prevSlide" style="left: -150px;">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample2" data-bs-slide="prev" @click="prevSlide" style="left: -150px; top: 250px;">
         <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-left" style="font-size: 50px;"></i></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample2" data-bs-slide="next" @click="nextSlide" style="right: -150px;">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample2" data-bs-slide="next" @click="nextSlide" style="right: -150px; top: 250px;">
         <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-circle-arrow-right" style="font-size: 50px"></i></span>
         <span class="visually-hidden">Next</span>
       </button>
