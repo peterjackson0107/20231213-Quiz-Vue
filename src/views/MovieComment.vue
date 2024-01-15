@@ -12,9 +12,9 @@ export default {
       //評論區相關
       comments: [
         //先放假資料
-        { id: 1, text: "good!!!", likes: 100, dislikes: 0, timestamp: Date.now() - 1000 * 60 * 5, replies: [], editing: false, },
-        { id: 2, text: "what???", likes: 50, dislikes: 20, timestamp: Date.now() - 1000 * 86400 * 70, replies: [], editing: false, },
-        { id: 3, text: "bad...", likes: 0, dislikes: 100, timestamp: Date.now() - 1000 * 86400 * 700, replies: [], editing: false, },
+        { id: 1, text: "good!!!", likes: 7, dislikes: 0, timestamp: Date.now() - 1000 * 60 * 5, replies: [], editing: false, },
+        { id: 2, text: "what???", likes: 3, dislikes: 9, timestamp: Date.now() - 1000 * 86400 * 70, replies: [], editing: false, },
+        { id: 3, text: "bad...", likes: 1, dislikes: 20, timestamp: Date.now() - 1000 * 86400 * 700, replies: [], editing: false, },
         // ...其他假留言...
       ],
       name: "John123456",
