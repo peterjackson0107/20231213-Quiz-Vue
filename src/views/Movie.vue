@@ -40,7 +40,7 @@ export default {
       for (let i = 0; i < this.objtype.length; i += this.itemTypePerSize) {
         cutArray.push(this.objtype.slice(i, i + this.itemTypePerSize));
       }
-
+      console.log(cutArray)
       return cutArray;
     },
 },
@@ -455,13 +455,10 @@ export default {
 
 <h1>分類選擇</h1>
 <div class="movieType">
-  <div v-for="(item, index) in typePerPage" :key="index">
-    <button type="button" v-for="(item, index1) in item" :key="index1">
-      {{ item.name }}
-    </button>
+    <select>
+      <option  v-for="(item, index) in this.objtype" :key="index" value="">{{ item.name }}</option>
+    </select>
   </div>
-</div>
-
 </template>
 
 <style scoped lang="scss">
@@ -476,6 +473,7 @@ span, button, p, label, select {
     width: 200px;
     height: 100px;
     margin: 20px;
+
     &:hover{
       background-color: gray;
     }
