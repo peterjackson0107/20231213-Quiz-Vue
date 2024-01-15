@@ -249,11 +249,23 @@ export default {
     await this.getTrailer();
     await this.initYouTubePlayer();
     await this.getMovieType();
+    setTimeout(() => {
+      $(".loader").hide();
+    }, 2000);
   },
 };
 </script>
 
 <template>
+  <div class="loader">
+    <div class="loadingio-spinner-rolling-3hvvs6i9c3b">
+      <div class="ldio-b9el9z8mymt">
+        <h1>請稍後......</h1>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="body">
     <!-- 電影資料 -->
     <div class="header">
@@ -377,6 +389,67 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.loader {
+  //又報錯
+  background: linear-gradient(90deg, #b3fffd 0, #e3e6ff 50%, #fde5f5 100%);
+  background-size: 200% 200%;
+  background-color: white;
+  // opacity: 0.8;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 100000;
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: 65vw 70vh;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  animation: bgGrade 10s ease infinite;
+}
+.ldio-b9el9z8mymt div {
+  //轉動齒輪
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 20px solid #af3fc8;
+  border-top-color: transparent;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.ldio-b9el9z8mymt div {
+  animation: ldio-b9el9z8mymt 1s linear infinite;
+  top: 100px;
+  left: 100px;
+}
+.loadingio-spinner-rolling-3hvvs6i9c3b {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  overflow: hidden;
+}
+.ldio-b9el9z8mymt {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0;
+}
+.ldio-b9el9z8mymt div {
+  box-sizing: content-box;
+}
+@keyframes ldio-b9el9z8mymt {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
 span, button, p, label, select {
   font-family: "Montserrat", sans-serif, sans-serif, "M PLUS 1";
   color: #557;

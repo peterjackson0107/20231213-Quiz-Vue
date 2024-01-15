@@ -472,5 +472,8 @@ button{
   width: 200px;
   height: 100px;
   margin: 20px;
+  &:hover{
+    background-color: gray;
+  }
 }
 </style>
