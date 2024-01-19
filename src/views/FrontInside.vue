@@ -2,14 +2,13 @@
 import check from "../views/FrontCheck.vue";
 import { computed } from "vue";
 import { ref, provide } from "vue";
-import { mapState, mapActions } from "pinia";
-import counter from "../stores/counter";
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 export default {
   data() {
     return {};
   },
   methods: {
-    ...mapActions(counter, ["setData"]),
   },
   components: {
     check,
@@ -23,7 +22,6 @@ export default {
   //     }
   // },
   computed: {
-    ...mapState(counter, ["writerData"]),
   },
 };
 </script>

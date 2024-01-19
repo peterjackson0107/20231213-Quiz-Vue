@@ -1,8 +1,8 @@
 <script>
 import axios from 'axios';
 import { RouterLink, RouterView } from "vue-router";
-import { mapState, mapActions } from "pinia";
-import counter from "../stores/counter";
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 import * as echarts from "echarts";
 import Swal from "sweetalert2";
 export default {
@@ -30,8 +30,8 @@ export default {
       }, 2000);
     });
 },
-  methods: {
-    ...mapActions(counter, ["createData"]),
+  methods: {    
+    ...mapActions(auth, ["createData"]),
     changeTab(id) {
       this.tabID = id;
     },
@@ -198,8 +198,8 @@ export default {
         this.showAlert1()
 },
   },
-  computed: {
-    ...mapState(counter, ["quizData"]),
+  computed: {    
+    ...mapState(auth,["getAuth","getuser"]), //帳號密碼
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
-import { mapState, mapActions } from 'pinia'
-import counter from '../stores/counter'
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 export default {
     data(){
         return {
@@ -29,7 +29,7 @@ export default {
     this.searchQuestion();
     },
     methods: {
-    ...mapActions(counter, ["createData"]),
+    ...mapState(auth,["getAuth","getuser"]), //帳號密碼
     searchQuestion() {
         axios({
             url:"http://localhost:8080/quiz/search",
@@ -90,7 +90,6 @@ export default {
     },
     },
     computed: {
-    ...mapState(counter, ["quizData"]),
     //處理quizList的分頁
     paginationQuizlist() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;

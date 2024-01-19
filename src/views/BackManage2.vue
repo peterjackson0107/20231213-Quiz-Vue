@@ -1,4 +1,6 @@
 <script>
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 export default {
   data() {},
 };

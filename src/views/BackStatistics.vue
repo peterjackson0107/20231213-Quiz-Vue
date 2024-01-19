@@ -1,5 +1,7 @@
 <script>
 import { RouterLink, RouterView } from "vue-router";
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 import * as echarts from "echarts";
 export default {
   data() {
@@ -13,6 +15,7 @@ export default {
     });
   },
   methods: {
+    ...mapState(auth,["getAuth","getuser"]), //帳號密碼
     drawPieChart() {
       let mytextStyle = {
         color: "#333",

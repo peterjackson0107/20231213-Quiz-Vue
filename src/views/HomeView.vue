@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 import { mapState, mapActions } from 'pinia'
-import counter from '../stores/counter'
+import auth from '../stores/auth'
 import Swal from "sweetalert2";
 export default {
     data(){
@@ -16,7 +16,7 @@ export default {
     mounted(){
     },
     methods: {
-    ...mapActions(counter, ["createData"]),
+    ...mapActions(auth, ["createData"]),
     login(){
         axios({
             url:"http://localhost:8080/api/login",

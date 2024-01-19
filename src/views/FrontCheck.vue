@@ -1,11 +1,11 @@
 <script>
-import { mapState, mapActions } from 'pinia'
-import counter from '../stores/counter'
+import { mapState,mapActions } from 'pinia';
+import auth from '../stores/auth';
 export default {
     data() {
     },
     computed: {
-        ...mapState(counter, ["writerData"])
+    ...mapState(auth,["getAuth","getuser"]), //帳號密碼
     },
 methods: {
     inWeb() {
